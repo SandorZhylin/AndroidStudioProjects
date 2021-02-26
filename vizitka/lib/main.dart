@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
               decoration: BoxDecoration(
                   color: Colors.lightBlueAccent,
                   borderRadius: BorderRadius.all(Radius.circular(20))),
-              Image.asset('assets/images/Sasha.png'),
+              child: Image.asset('assets/images/sancho.png'),
             ),
             SizedBox(height: 100),
             Container(
