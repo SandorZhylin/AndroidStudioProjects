@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
           children: [
             Expanded(
               child: Container(
-                c
+                margin: EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: Colors.red,
                   borderRadius: BorderRadius.all(
