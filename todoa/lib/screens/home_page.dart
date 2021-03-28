@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todoa/model/item_data.dart';
-import 'package:todoa/widgets/tile_item.dart';
+import 'package:todoa/model/tile_item.dart';
+import 'package:todoa/widgets/item_data.dart';
 
 class HomePage extends StatelessWidget {
   @override
