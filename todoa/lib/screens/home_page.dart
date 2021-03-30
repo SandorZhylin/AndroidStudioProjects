@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todoa/model/tile_item.dart';
+import 'package:todoa/screens/add_items_page.dart';
 import 'package:todoa/widgets/item_data.dart';
 
 class HomePage extends StatelessWidget {
@@ -10,7 +11,7 @@ class HomePage extends StatelessWidget {
         children: [
           _buildTopBar(context),
           _buildBodyContent(),
-          _buildBottomButton(),
+          _buildBottomButton(context),
         ],
       ),
     );
@@ -92,20 +93,30 @@ Widget _buildBodyContent() {
   );
 }
 
-Widget _buildBottomButton() {
+Widget _buildBottomButton(BuildContext context) {
   return Container(
     child: Align(
       alignment: FractionalOffset.bottomCenter,
       child: Container(
         height: 100,
         child: TextButton(
-          onPressed: () => {},
+          onPressed: () => {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AddItemsPage(),
+              ),
+            ),
+          },
           style: ButtonStyle(
             backgroundColor:
                 MaterialStateProperty.all<Color>(Colors.deepOrange),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30.0),
+                  topRight: Radius.circular(30.0),
+                ),
               ),
             ),
           ),

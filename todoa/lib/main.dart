@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:todoa/screens/home_page.dart';
 
 void main() {
-  runApp(MyApp());
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+
+  runApp(ToDoApp());
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class ToDoApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'ToDo App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
