@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
+import 'room_encounters.dart';
 import 'rooms_descriptions.dart';
 
 void main() {
@@ -13,24 +15,90 @@ class Dungeon extends StatefulWidget {
 }
 
 class DungeonState extends State<Dungeon> {
+  bool isButtonDisabled = false;
   RoomsDescriptions roomsDescriptions = RoomsDescriptions();
   String textWayDescription = 'Which way you would like to go?';
   String textRoomDescription =
       'So, your journey through the dungeon begins! You have to walk through 10 doors and stay alive! Simple as that! There are four doors in front of you: North, South, East and West...';
-  int lives = 3;
-  int openedRooms = 10;
+  int lives = 6;
+  int livesImpact = 0;
+  int roomsToOpen = 10;
+  int openedRooms = 0;
+  int openedRoomsImpact = 0;
+  String textEncounter = '';
 
-  void journey() {}
+  void journey() {
+    RoomEncounterParameters roomEncounters = RoomEncounters();
+    livesImpact = roomEncounters.livesImpact;
+    openedRoomsImpact = roomEncounters.openedRoomsImpact;
+    textEncounter = roomEncounters.textEncounter;
+    textRoomDescription = roomsDescriptions.get();
+    lives += livesImpact;
+    openedRooms++;
+    openedRooms += openedRoomsImpact;
+
+    setState(
+      () {
+        if (openedRooms > 10) {
+          openedRooms = 10;
+        }
+        if (lives > 6) {
+          lives = 6;
+          textEncounter =
+              textEncounter + 'Unfortunately, you already have maximum health.';
+        }
+        if (lives < 1) {
+          isButtonDisabled = true;
+          lives = 0;
+          textEncounter =
+              textEncounter + ' YOU DIED... PRESS NEW GAME TO TRY AGAIN.';
+        }
+        if (openedRooms == 10 && lives > 1) {
+          isButtonDisabled = true;
+          textEncounter = textEncounter +
+              ' CONGRATS! YOU HAVE MANAGED TO WALK THROUGH THE DUNGEON AND STAY ALIVE! PRESS NEW GAME TO TRY AGAIN.';
+        }
+      },
+    );
+  }
+
+  newGame() {
+    setState(() {
+      isButtonDisabled = false;
+      textWayDescription = 'Which way you would like to go?';
+      textRoomDescription =
+          'So, your journey through the dungeon begins! You have to walk through 10 doors and stay alive! Simple as that! There are four doors in front of you: North, South, East and West...';
+      lives = 6;
+      livesImpact = 0;
+      roomsToOpen = 10;
+      openedRooms = 0;
+      openedRoomsImpact = 0;
+      textEncounter = '';
+    });
+  }
+
+  Function buttonPress(String chosenWay) {
+    isButtonDisabled ? null : journey();
+    isButtonDisabled
+        ? textWayDescription = 'This game is over'
+        : textWayDescription = chosenWay;
+  }
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: SafeArea(
         child: Scaffold(
           body: Column(
             children: [
               buildTopBar(),
               buildRoomText(context),
+              buildLivesAndRooms(context),
               buildMovementButtons(context),
               buildMovementText(context),
             ],
@@ -42,7 +110,7 @@ class DungeonState extends State<Dungeon> {
 
   Widget buildTopBar() {
     return Container(
-      height: 125,
+      height: 100,
       decoration: BoxDecoration(
         image: DecorationImage(
           fit: BoxFit.fill,
@@ -64,7 +132,7 @@ class DungeonState extends State<Dungeon> {
 
   Widget buildRoomText(BuildContext context) {
     return Container(
-      height: 150,
+      height: 180,
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(
@@ -78,13 +146,88 @@ class DungeonState extends State<Dungeon> {
       ),
       child: Center(
         child: Text(
-          '$textRoomDescription',
+          '$textRoomDescription' + '$textEncounter',
           style: TextStyle(
             fontFamily: 'NewTegomin',
-            fontSize: 16,
+            fontSize: 14,
             fontWeight: FontWeight.bold,
           ),
         ),
+      ),
+    );
+  }
+
+  Widget buildLivesAndRooms(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        top: 10,
+        left: 10,
+        right: 10,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.favorite,
+                color: Colors.red,
+                size: 30.0,
+              ),
+              Text(
+                lives.toString() + '/6',
+                style: TextStyle(
+                  fontFamily: 'NewTegomin',
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 30,
+            width: 150,
+            child: FloatingActionButton(
+              child: Text(
+                'NEW GAME',
+                style: TextStyle(
+                  fontFamily: 'NewTegomin',
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                  fontSize: 18,
+                ),
+              ),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15.0))),
+              backgroundColor: Colors.grey.shade600,
+              onPressed: () {
+                newGame();
+              },
+            ),
+          ),
+          Row(
+            children: [
+              Container(
+                height: 28,
+                width: 28,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/icon_door.png'),
+                    fit: BoxFit.fill,
+                  ),
+                ),
+              ),
+              Text(
+                openedRooms.toString() + '/10',
+                style: TextStyle(
+                  fontFamily: 'NewTegomin',
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -94,7 +237,7 @@ class DungeonState extends State<Dungeon> {
       children: [
         Padding(
           padding: EdgeInsets.only(
-            top: 30.0,
+            top: 20.0,
           ),
           child: SizedBox(
             height: 80,
@@ -111,8 +254,7 @@ class DungeonState extends State<Dungeon> {
               onPressed: () {
                 setState(
                   () {
-                    textWayDescription = 'You went North.';
-                    textRoomDescription = roomsDescriptions.get();
+                    buttonPress('You went North.');
                   },
                 );
               },
@@ -139,8 +281,7 @@ class DungeonState extends State<Dungeon> {
                   onPressed: () {
                     setState(
                       () {
-                        textWayDescription = 'You went West.';
-                        textRoomDescription = roomsDescriptions.get();
+                        buttonPress('You went West.');
                       },
                     );
                   },
@@ -171,8 +312,7 @@ class DungeonState extends State<Dungeon> {
                   onPressed: () {
                     setState(
                       () {
-                        textWayDescription = 'You went East.';
-                        textRoomDescription = roomsDescriptions.get();
+                        buttonPress('You went East.');
                       },
                     );
                   },
@@ -196,8 +336,7 @@ class DungeonState extends State<Dungeon> {
             onPressed: () {
               setState(
                 () {
-                  textWayDescription = 'You went South.';
-                  textRoomDescription = roomsDescriptions.get();
+                  buttonPress('You went South.');
                 },
               );
             },
@@ -232,6 +371,7 @@ class DungeonState extends State<Dungeon> {
               style: TextStyle(
                 fontFamily: 'NewTegomin',
                 fontWeight: FontWeight.bold,
+                fontSize: 20,
               ),
             ),
           ),
