@@ -12,7 +12,7 @@ RoomEncounterParameters RoomEncounters() {
   List<RoomEncounterParameters> encounterType = [
     RoomEncounterParameters('There is nothing useful in this room.', 0, 0),
     RoomEncounterParameters(
-        'There is a small vial with healing potion on the floor (Restores 1 health).',
+        'There is a small fountain with healing water in the room. (Restores 1 health).',
         1,
         0),
     RoomEncounterParameters(
@@ -24,7 +24,7 @@ RoomEncounterParameters RoomEncounters() {
         -2,
         0),
     RoomEncounterParameters(
-        'There is a lone adventurer in the room, who is stuck here just like you. He has some experience an is ready to show you how to pass the next room unharmed (+ 1 successfully passed room).',
+        'There is a lone adventurer in the room, who is stuck in here just like you. He has some experience and is ready to show you how to pass the next room unharmed (+ 1 successfully passed room).',
         0,
         1),
   ];

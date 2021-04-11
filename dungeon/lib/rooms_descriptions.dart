@@ -17,6 +17,7 @@ class RoomsDescriptions {
     'It looks like a guard room, several beds and a broken cauldron in the corner.',
     'An ordinary room, bare walls and a stone underfoot.'
   ];
+
   String get() {
     return roomsDescriptions
         .removeAt(Random().nextInt(roomsDescriptions.length));

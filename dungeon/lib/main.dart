@@ -74,6 +74,7 @@ class DungeonState extends State<Dungeon> {
       openedRooms = 0;
       openedRoomsImpact = 0;
       textEncounter = '';
+      roomsDescriptions = RoomsDescriptions();
     });
   }
 
