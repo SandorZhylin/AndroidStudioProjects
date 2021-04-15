@@ -2,7 +2,7 @@ import 'dart:math';
 
 class RoomsDescriptions {
   List<String> roomsDescriptions = [
-    'A gloomy dungeon, a bare brick wall, a collapsed ceiling in places, several doors leading in different directions.',
+    'A gloomy dungeon, a bare brick wall, a collapsed ceiling, several doors leading in different directions.',
     'Apparently this is a former armory room. But everything has long been rusted and covered with dust.',
     'It looks like something was kept here, wooden shelves, sacks.',
     'Everything is in a spider web, it is dark and uncomfortable in here.',
