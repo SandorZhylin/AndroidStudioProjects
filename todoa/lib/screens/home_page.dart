@@ -1,6 +1,8 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:todoa/model/tile_item.dart';
+import 'package:provider/provider.dart';
+import 'package:todoa/components/bottom_button.dart';
+import 'package:todoa/data/data_collection.dart';
 import 'package:todoa/screens/add_items_page.dart';
 import 'package:todoa/widgets/item_data.dart';
 
@@ -15,7 +17,7 @@ class HomePageState extends State<HomePage> {
       body: Column(
         children: [
           _buildTopBar(context),
-          _buildBodyContent(),
+          _buildBodyContent(context),
           _buildBottomButton(context),
         ],
       ),
@@ -72,42 +74,26 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildBodyContent() {
-    List<ItemData> items = [
-      ItemData(
-        isChecked: true,
-        image: 'assets/sample_avatar.png',
-        title: 'Item Text 0',
-      ),
-      ItemData(
-        isChecked: false,
-        image: null,
-        title: 'Item Text 1',
-      ),
-      ItemData(
-        isChecked: true,
-        image: 'assets/sample_avatar.png',
-        title: 'Item Text 2',
-      ),
-      ItemData(
-        isChecked: false,
-        image: 'assets/sample_avatar.png',
-        title: 'Item Text 3',
-      ),
-      ItemData(
-        isChecked: false,
-        image: 'assets/sample_avatar.png',
-        title: 'Item Text 4',
-      ),
-    ];
+  Widget _buildBodyContent(BuildContext context) {
     return Expanded(
-      child: ListView.builder(
-        itemCount: items.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: TileItem(
-              itemData: items[index],
-            ),
+      child: Consumer(
+        builder: (BuildContext context, DataCollection todos, Widget? child) {
+          return ListView.builder(
+            itemCount: todos.length(),
+            itemBuilder: (context, index) {
+              final todo = todos.get(index);
+
+              return ListTile(
+                title: TileItem(
+                  isChecked: todo.isChecked,
+                  title: todo.title,
+                  image: todo.image,
+                  onChanged: (bool isChecked) {
+                    todos.updateToDo(todo);
+                  },
+                ),
+              );
+            },
           );
         },
       ),
@@ -115,44 +101,20 @@ class HomePageState extends State<HomePage> {
   }
 
   Widget _buildBottomButton(BuildContext context) {
-    return Container(
-      child: Align(
-        alignment: FractionalOffset.bottomCenter,
-        child: Container(
-          height: 100,
-          child: TextButton(
-            onPressed: () => {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddItemsPage(),
-                ),
-              ),
+    return BottomButton(
+        title: 'Add Item',
+        onTap: () {
+          showModalBottomSheet<void>(
+            context: context,
+            isScrollControlled: true,
+            builder: (BuildContext context) {
+              return Container(
+                height: 220,
+                color: Color(0xff757575),
+                child: AddItemsPage(),
+              );
             },
-            style: ButtonStyle(
-              backgroundColor:
-                  MaterialStateProperty.all<Color>(Colors.deepOrange),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30.0),
-                    topRight: Radius.circular(30.0),
-                  ),
-                ),
-              ),
-            ),
-            child: Center(
-              child: Text(
-                'Add items',
-                style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
+          );
+        });
   }
 }
