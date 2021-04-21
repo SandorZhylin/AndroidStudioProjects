@@ -88,6 +88,7 @@ class HomePageState extends State<HomePage> {
                   isChecked: todo.isChecked,
                   title: todo.title,
                   image: todo.image,
+                  id: index,
                   onChanged: (bool isChecked) {
                     todos.updateToDo(todo);
                   },
