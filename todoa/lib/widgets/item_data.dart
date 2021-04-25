@@ -28,7 +28,6 @@ class _TileItemState extends State<TileItem>
   late Animation _animation;
 
   bool isChecked = false;
-  // double position = 5;
 
   @override
   void initState() {
@@ -156,7 +155,7 @@ class DetailedImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Detail screen"),
+        title: Text("Detailed screen"),
       ),
       body: Align(
         alignment: Alignment.topCenter,

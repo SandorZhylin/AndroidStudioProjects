@@ -15,7 +15,7 @@ class DataCollection extends ChangeNotifier {
     ),
     ItemData(
       isChecked: false,
-      image: null,
+      image: 'assets/sample_avatar.png',
       title: 'Item Text 2',
     ),
     ItemData(

@@ -1,4 +1,5 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todoa/components/bottom_button.dart';
@@ -11,6 +12,31 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  late final dynamic data;
+
+  Future<dynamic> getData() async {
+    final Stream<QuerySnapshot> document =
+        _firestore.collection("Todos").snapshots();
+
+    document.forEach((QuerySnapshot snapshot) async {
+      snapshot.docs.forEach((DocumentSnapshot docs) async {
+        List list = docs.data()!['Groceries'];
+
+        print(list);
+      });
+    });
+
+    print('');
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    getData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
