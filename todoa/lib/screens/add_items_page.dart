@@ -44,8 +44,8 @@ class AddItemsPage extends StatelessWidget {
             title: 'Add',
             onTap: () {
               if (newToDoTitle.isNotEmpty) {
-                Provider.of<DataCollection>(context, listen: false)
-                    .addToDo(newToDoTitle);
+                Provider.of<TodosCollection>(context, listen: false)
+                    .addItem(newToDoTitle);
               }
               Navigator.pop(context);
             },

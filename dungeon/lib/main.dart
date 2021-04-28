@@ -15,6 +15,7 @@ class Dungeon extends StatefulWidget {
 }
 
 class DungeonState extends State<Dungeon> {
+  @override
   bool isButtonDisabled = false;
   RoomsDescriptions roomsDescriptions = RoomsDescriptions();
   String textWayDescription = 'Which way you would like to go?';

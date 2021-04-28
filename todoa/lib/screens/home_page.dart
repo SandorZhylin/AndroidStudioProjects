@@ -12,29 +12,11 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late final dynamic data;
-
-  Future<dynamic> getData() async {
-    final Stream<QuerySnapshot> document =
-        _firestore.collection("Todos").snapshots();
-
-    document.forEach((QuerySnapshot snapshot) async {
-      snapshot.docs.forEach((DocumentSnapshot docs) async {
-        List list = docs.data()!['Groceries'];
-
-        print(list);
-      });
-    });
-
-    print('');
-  }
 
   @override
   void initState() {
     super.initState();
-
-    getData();
   }
 
   @override
@@ -102,25 +84,38 @@ class HomePageState extends State<HomePage> {
 
   Widget _buildBodyContent(BuildContext context) {
     return Expanded(
-      child: Consumer(
-        builder: (BuildContext context, DataCollection todos, Widget? child) {
-          return ListView.builder(
-            itemCount: todos.length(),
-            itemBuilder: (context, index) {
-              final todo = todos.get(index);
+      child: StreamBuilder(
+        stream: Provider.of<TodosCollection>(context).getCollectionAsSteam(),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> asyncSnapshot) {
+          if (!asyncSnapshot.hasData) {
+            return Center(
+              child: Text('Loading...'),
+            );
+          }
 
-              return ListTile(
-                title: TileItem(
-                  isChecked: todo.isChecked,
-                  title: todo.title,
-                  image: todo.image,
-                  id: index,
-                  onChanged: (bool isChecked) {
-                    todos.updateToDo(todo);
-                  },
-                ),
+          List<Widget> todoWidgets = [];
+          asyncSnapshot.data.docs.forEach(
+            (DocumentSnapshot docs) {
+              final id = docs.id;
+
+              bool isSelected = docs.data()!['isSelected'];
+              String title = docs.data()!['todo'];
+
+              final item = TileItem(
+                title: title,
+                isChecked: isSelected,
+                onCheckedChanges: (bool isChecked) {
+                  Provider.of<TodosCollection>(context)
+                      .updateItem(id, isSelected, title);
+                },
               );
+
+              todoWidgets.add(item);
             },
+          );
+
+          return ListView(
+            children: todoWidgets,
           );
         },
       ),
@@ -129,19 +124,20 @@ class HomePageState extends State<HomePage> {
 
   Widget _buildBottomButton(BuildContext context) {
     return BottomButton(
-        title: 'Add Item',
-        onTap: () {
-          showModalBottomSheet<void>(
-            context: context,
-            isScrollControlled: true,
-            builder: (BuildContext context) {
-              return Container(
-                height: 220,
-                color: Color(0xff757575),
-                child: AddItemsPage(),
-              );
-            },
-          );
-        });
+      title: 'Add Item',
+      onTap: () {
+        showModalBottomSheet<void>(
+          context: context,
+          isScrollControlled: true,
+          builder: (BuildContext context) {
+            return Container(
+              height: 220,
+              color: Color(0xff757575),
+              child: AddItemsPage(),
+            );
+          },
+        );
+      },
+    );
   }
 }

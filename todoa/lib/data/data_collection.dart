@@ -1,51 +1,21 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:todoa/model/tile_item.dart';
 
-class DataCollection extends ChangeNotifier {
-  List<ItemData> _items = [
-    ItemData(
-      isChecked: false,
-      image: 'assets/sample_avatar.png',
-      title: 'Item Text 0',
-    ),
-    ItemData(
-      isChecked: false,
-      image: 'assets/sample_avatar.png',
-      title: 'Item Text 1',
-    ),
-    ItemData(
-      isChecked: false,
-      image: 'assets/sample_avatar.png',
-      title: 'Item Text 2',
-    ),
-    ItemData(
-      isChecked: false,
-      image: 'assets/sample_avatar.png',
-      title: 'Item Text 3',
-    ),
-  ];
+class TodosCollection extends ChangeNotifier {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  int length() {
-    return _items.length;
+  void addItem(String title) {
+    _firestore.collection('Todos').add({
+      'todo': title,
+      'isSelected': false,
+    });
   }
 
-  ItemData get(int index) {
-    return _items[index];
+  void updateItem(String id, bool isSelected, String title) {
+    _firestore.collection('Todos').doc(id).update({
+      'isSelected': isSelected,
+    });
   }
 
-  void updateToDo(ItemData todo) {
-    todo.isChecked = !todo.isChecked;
-
-    notifyListeners();
-  }
-
-  void addToDo(String title) {
-    _items.insert(0, ItemData(isChecked: false, title: title));
-
-    notifyListeners();
-  }
-
-  void deleteToDo(int position) {
-    notifyListeners();
-  }
+  getCollectionAsSteam() => _firestore.collection('Todos').snapshots();
 }

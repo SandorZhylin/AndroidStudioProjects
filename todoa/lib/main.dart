@@ -20,7 +20,7 @@ class ToDoApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => DataCollection(),
+      create: (BuildContext context) => TodosCollection(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'TODOa',

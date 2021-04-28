@@ -8,14 +8,14 @@ class TileItem extends StatefulWidget {
   final String title;
   final int id;
 
-  final Function onChanged;
+  final Function onCheckedChanges;
 
   TileItem({
     this.isChecked = false,
     required this.title,
     this.image,
     this.id = 0,
-    required this.onChanged,
+    required this.onCheckedChanges,
   });
 
   @override
@@ -80,7 +80,7 @@ class _TileItemState extends State<TileItem>
                 print('$value');
 
                 _controller.forward(from: 0.0);
-                widget.onChanged(value);
+                widget.onCheckedChanges(value);
               },
             ),
             Expanded(
