@@ -1,16 +1,28 @@
-# todoa
+# **TODOa.**
 
-A new Flutter application.
+TODOa is an app, that helps you to remember all tasks, planned for today and easily track their achievement.
 
-## Getting Started
+### **Prerequisites**
 
-This project is a starting point for a Flutter application.
+    * You have installed the latest version of Android.
 
-A few resources to get you started if this is your first Flutter project:
+### **Installing**
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+### To install TODOa app, follow these steps:
+    * Download the todoa_app.apk.
+    * Launch todoa_app.apk to install in to your device.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### **Using Dungeon**
+
+To use TODOa, follow these steps:
+    * Launch the app.
+    * Click "Add item" to add a task you need to do.
+    * Print the name of the task and click "Add".
+    * Your task and its checkbox will appear on the screen.
+    * To get closer look at current task make a single tap on its name.
+    * To mark a task as completed simply click on its checkbox. It will become crossed out.
+    * To delete a task make a long press on its description.
+
+### **Contact**
+
+If you want to contact me you can reach me at a.zhylin1987@gmail.com.

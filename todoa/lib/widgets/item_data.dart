@@ -1,33 +1,28 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todoa/data/data_collection.dart';
 
-class TileItem extends StatefulWidget {
+class ItemData extends StatefulWidget {
   final bool isChecked;
-  final String? image;
   final String title;
-  final int id;
-
   final Function onCheckedChanges;
 
-  TileItem({
+  ItemData({
     this.isChecked = false,
     required this.title,
-    this.image,
-    this.id = 0,
     required this.onCheckedChanges,
   });
 
   @override
-  _TileItemState createState() => _TileItemState();
+  _ItemDataState createState() => _ItemDataState();
 }
 
-class _TileItemState extends State<TileItem>
+class _ItemDataState extends State<ItemData>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation _animation;
-
-  bool isChecked = false;
 
   @override
   void initState() {
@@ -56,8 +51,6 @@ class _TileItemState extends State<TileItem>
 
   @override
   Widget build(BuildContext context) {
-    bool isImageExists = !(widget.image == null);
-
     return Container(
       padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 12.0),
       child: GestureDetector(
@@ -66,10 +59,13 @@ class _TileItemState extends State<TileItem>
             context,
             PageRouteBuilder(
               transitionDuration: Duration(seconds: 1),
-              pageBuilder: (_, __, ___) =>
-                  DetailedImage(tag: widget.id.toString()),
+              pageBuilder: (_, __, ___) => DetailedItem(tag: widget.title),
             ),
           );
+        },
+        onLongPress: () {
+          Provider.of<TodosCollection>(context, listen: false)
+              .deleteItem(widget.title);
         },
         child: Row(
           children: [
@@ -91,52 +87,24 @@ class _TileItemState extends State<TileItem>
                       left: _animation.value + 10.0,
                       right: 10.0 - _animation.value,
                     ),
-                    child: Text(
-                      widget.title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: widget.isChecked ? Colors.grey : Colors.black,
-                        decoration: widget.isChecked
-                            ? TextDecoration.lineThrough
-                            : null,
+                    child: Hero(
+                      tag: widget.title,
+                      child: Text(
+                        widget.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 24,
+                          color: widget.isChecked ? Colors.grey : Colors.black,
+                          decoration: widget.isChecked
+                              ? TextDecoration.lineThrough
+                              : null,
+                        ),
                       ),
                     ),
                   );
                 },
                 animation: _animation,
-              ),
-            ),
-            Hero(
-              tag: widget.id.toString(),
-              child: Container(
-                margin: EdgeInsets.all(12.0),
-                width: isImageExists ? 60.0 : 10.0,
-                height: 60.0,
-                decoration: isImageExists
-                    ? BoxDecoration(
-                        color: const Color(0xff7c94b6),
-                        image: DecorationImage(
-                          image: AssetImage((widget.image == null
-                              ? 'assets/sample_avatar.png'
-                              : widget.image)!),
-                          fit: BoxFit.cover,
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                        border: Border.all(
-                          color: Colors.white,
-                          width: 4.0,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey,
-                            offset: Offset(0.0, 4.0), //(x,y)
-                            blurRadius: 6.0,
-                          ),
-                        ],
-                      )
-                    : BoxDecoration(),
               ),
             ),
           ],
@@ -146,10 +114,10 @@ class _TileItemState extends State<TileItem>
   }
 }
 
-class DetailedImage extends StatelessWidget {
+class DetailedItem extends StatelessWidget {
   final String tag;
 
-  const DetailedImage({this.tag = '1'});
+  const DetailedItem({this.tag = 'title'});
 
   @override
   Widget build(BuildContext context) {
@@ -160,15 +128,13 @@ class DetailedImage extends StatelessWidget {
       body: Align(
         alignment: Alignment.topCenter,
         child: Container(
-          width: 300.0,
-          height: 300.0,
-          child: Hero(
-            tag: tag,
-            child: Container(
-              width: 200.0,
-              height: 200.0,
-              color: Colors.grey,
-              child: Image.asset('assets/sample_avatar.png'),
+          child: Center(
+            child: Hero(
+              tag: tag,
+              child: Text(
+                tag,
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              ),
             ),
           ),
         ),

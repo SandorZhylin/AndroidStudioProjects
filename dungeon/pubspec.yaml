@@ -1,5 +1,5 @@
 name: dungeon
-description: A new Flutter application.
+description: A simple game to test your luck in a dangerous quest through a gloomy dungeon.
 
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev

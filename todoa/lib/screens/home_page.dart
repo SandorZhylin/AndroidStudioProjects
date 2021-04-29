@@ -1,5 +1,6 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todoa/components/bottom_button.dart';
@@ -85,7 +86,8 @@ class HomePageState extends State<HomePage> {
   Widget _buildBodyContent(BuildContext context) {
     return Expanded(
       child: StreamBuilder(
-        stream: Provider.of<TodosCollection>(context).getCollectionAsSteam(),
+        stream: Provider.of<TodosCollection>(context, listen: false)
+            .getCollectionAsSteam(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> asyncSnapshot) {
           if (!asyncSnapshot.hasData) {
             return Center(
@@ -101,12 +103,13 @@ class HomePageState extends State<HomePage> {
               bool isSelected = docs.data()!['isSelected'];
               String title = docs.data()!['todo'];
 
-              final item = TileItem(
+              final item = ItemData(
                 title: title,
                 isChecked: isSelected,
                 onCheckedChanges: (bool isChecked) {
-                  Provider.of<TodosCollection>(context)
-                      .updateItem(id, isSelected, title);
+                  context
+                      .read<TodosCollection>()
+                      .updateItem(id, isChecked, title);
                 },
               );
 
