@@ -6,11 +6,13 @@ class ItemData extends StatefulWidget {
   final bool isChecked;
   final String title;
   final Function onCheckedChanges;
+  final Function onLongPressed;
 
   ItemData({
     this.isChecked = false,
     required this.title,
     required this.onCheckedChanges,
+    required this.onLongPressed,
   });
 
   @override
@@ -62,27 +64,7 @@ class _ItemDataState extends State<ItemData>
           );
         },
         onLongPress: () {
-          showDialog(
-            context: context,
-            builder: (_) => AlertDialog(
-              title: Text('Item deletion'),
-              content: Text('Would you like to delete this item?'),
-              elevation: 24,
-              actions: [
-                TextButton(
-                  onPressed: () {},
-                  child: Text('Yes'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text('No'),
-                ),
-              ],
-            ),
-            barrierDismissible: true,
-          );
+          widget.onLongPressed();
         },
         child: Row(
           children: [

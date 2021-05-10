@@ -11,7 +11,7 @@ It can also act as a meaning to make simple yes/no decisions, depending on outco
 
 To install Dungeon app, follow these steps:
     * Download the dungeon_app.apk.
-    * Launch dungeon_app.apk to install in to your device.
+    * Launch dungeon_app.apk to install it to your device.
 
 ### **Using Dungeon**
 

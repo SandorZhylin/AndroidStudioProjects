@@ -104,14 +104,16 @@ class HomePageState extends State<HomePage> {
               String title = docs.data()!['todo'];
 
               final item = ItemData(
-                title: title,
-                isChecked: isSelected,
-                onCheckedChanges: (bool isChecked) {
-                  context
-                      .read<TodosCollection>()
-                      .updateItem(id, isChecked, title);
-                },
-              );
+                  title: title,
+                  isChecked: isSelected,
+                  onCheckedChanges: (bool isChecked) {
+                    context
+                        .read<TodosCollection>()
+                        .updateItem(id, isChecked, title);
+                  },
+                  onLongPressed: () {
+                    _showDeleteDialog(id);
+                  });
 
               todoWidgets.add(item);
             },
@@ -122,6 +124,33 @@ class HomePageState extends State<HomePage> {
           );
         },
       ),
+    );
+  }
+
+  void _showDeleteDialog(String id) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text('Item deletion'),
+        content: Text('Would you like to delete this item?'),
+        elevation: 24,
+        actions: [
+          TextButton(
+            onPressed: () {
+              context.read<TodosCollection>().deleteItem(id);
+              Navigator.pop(context);
+            },
+            child: Text('Yes'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('No'),
+          ),
+        ],
+      ),
+      barrierDismissible: true,
     );
   }
 
