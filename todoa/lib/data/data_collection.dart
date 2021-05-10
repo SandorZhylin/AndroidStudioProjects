@@ -21,8 +21,8 @@ class TodosCollection extends ChangeNotifier {
     );
   }
 
-  void deleteItem(String title) {
-    _firestore.collection('Todos').doc(title).delete();
+  void deleteItem(String id) {
+    _firestore.collection('Todos').doc(id).delete();
   }
 
   getCollectionAsSteam() => _firestore.collection('Todos').snapshots();

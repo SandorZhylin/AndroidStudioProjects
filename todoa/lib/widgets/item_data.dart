@@ -1,8 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:todoa/data/data_collection.dart';
 
 class ItemData extends StatefulWidget {
   final bool isChecked;
@@ -64,8 +62,27 @@ class _ItemDataState extends State<ItemData>
           );
         },
         onLongPress: () {
-          Provider.of<TodosCollection>(context, listen: false)
-              .deleteItem(widget.title);
+          showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+              title: Text('Item deletion'),
+              content: Text('Would you like to delete this item?'),
+              elevation: 24,
+              actions: [
+                TextButton(
+                  onPressed: () {},
+                  child: Text('Yes'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('No'),
+                ),
+              ],
+            ),
+            barrierDismissible: true,
+          );
         },
         child: Row(
           children: [
